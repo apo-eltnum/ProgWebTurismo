@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+      <style>
+          #foto{
+            height: 10em;
+            width: 10em;
+            background-color: #64a19d;;
+            margin-bottom: .5em;
+            padding-bottom: .5em;
+            align-self: center;
+        }
+        #btnFoto,#progreso{
+          display: none;
+        }
+        #formulario{
+            width: 28em;
+            margin-bottom: 3em;
+            margin-top: 3em;
+            background-color: white;
+            padding-top: .4em;
+            opacity: 1;
+        }
+        #btnCancelar{
+            width: 15em; 
+            height: 6em; 
+            display: none;
+        }
+        #btnActualizar{
+            width: 15em; 
+            height: 6em; 
+        }
+        #btnHabilitar{
+            width: 15em; 
+            height: 6em; 
+        }
+        #cardSubmit{
+          display: none;
+        }
+      </style>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Equipo 2 - Turismo</title>
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+    <script
+      src="https://use.fontawesome.com/releases/v5.15.1/js/all.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- Google fonts-->
+    <link
+      href="https://fonts.googleapis.com/css?family=Varela+Round"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+      rel="stylesheet"
+    />
+
+  </head>
+
+  
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-app.js"></script>
+
+
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.23.0/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.23.0/firebase-storage.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.23.0/firebase-auth.js"></script>
+
+  <body id="page-top">
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="index.html"
+          >Toluca Diviértete</a
+        >
+        <button
+          class="navbar-toggler navbar-toggler-right"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarResponsive"
+          aria-controls="navbarResponsive"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          Menu
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="collapse" data-target="#collapseLogin" id="tabNombre"></a>
+              <div class="collapse" id="collapseLogin">
+                <div class="card card-body">
+                  <div class="hover-overlay ripple shadow-1-strong rounded" align="center" style="margin-bottom: 1em;">
+                    <a href="perfil.html"><i class="fa fa-user"></i>Mi Perfil</a>
+                  </div>
+                  <button class="btn btn-danger" align="center" id="btnSalir">
+                      <i class="fa fa-sign-out"></i> Cerrar Sesión
+                  </button>
+                </div>  
+                </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+
+    <div class="principal" align="center">
+        <div class="formulario card"  id="formulario">
+            <div id="contenedor card-body">
+            <h2><i class="fa fa-sign-in"></i>Mi Perfil</h2>
+            <div>
+              <div>
+                <img id="foto"/>
+                <input class="btn float-sm-center btn-primary" type="file" accept='image/x-png, image/jpeg, image/jpg'id="btnFoto"/>
+                <h6 id="progreso"></h6>
+              </div>
+            <div class="datos">
+            <div class="form-group" align="left">  
+                <label><i class="fa fa-user"></i>Nombre(s)</label>
+                <input type="text" class="form-control" name="txtNombreEdit" placeholder="Nombre" id="nombreEdit" minlength="3" disabled required/>
+            </div>
+            <div class="form-group" align="left">  
+                <label><i class="fa fa-user"></i>Apellido (s)</label>
+                <input type="text" class="form-control" name="txtUApellidoEdit" placeholder="Apellido(s)" id="apellidoEdit" minlength="3" disabled required/>
+            </div>        
+            <div class="form-group" align="left">  
+                <label><i class="fa fa-user"></i>Correo Electrónico</label>
+                <input type="email" class="form-control" name="txtCorreoEdit" placeholder="Correo" id="correoEdit" minlength="8" disabled required/>
+            </div>
+            <div class="form-group" align="left">
+                <label><i class="fa fa-eye-slash"></i>Contraseña</label>
+                <input type="password" class="form-control" name="txtPassEdit" placeholder="Contraseña" id="passEdit" minlength="6" disabled required/>
+            </div>
+            <div class="card" id="cardSubmit">
+              <div class="card-body column">
+                <button type="submit" class="btn btn-primary"  id="btnActualizar">
+                  <i class="fa fa-save"></i> Actualizar Datos
+                </button>
+              </div>
+            </div>
+          </div>
+            <div class="card">
+              <div class="card-body column">
+                <button class="btn btn-primary"  id="btnHabilitar">
+                    <i class="fa fa-edit"></i> Actualizar Datos
+                </button>
+                <button class="btn btn-danger"  id="btnCancelar">
+                    <i class="fa fa-window-close"></i> Cancelar
+                </button>
+              </div>
+          </div>
+            </div>
+
+        </div>
+    </div>
+    
+    <!-- Footer-->
+    <footer class="footer bg-black small text-center text-white-50">
+      <div class="container">Copyright © Your Website 2020</div>
+    </footer>
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/styles.css" rel="stylesheet" />
+        <!-- Bootstrap core JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Third party plugin JS-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+        
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+
+        <script>
+              // Your web app's Firebase configuration
+          // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+          var firebaseConfig = {
+            apiKey: "AIzaSyDc9LqktSq5joZke4iOH_XvqcKup_Je2aQ",
+            authDomain: "sitio-turistico-prog-web.firebaseapp.com",
+            projectId: "sitio-turistico-prog-web",
+            storageBucket: "sitio-turistico-prog-web.appspot.com",
+            messagingSenderId: "943450679611",
+            appId: "1:943450679611:web:4e11f096b4f336d6236f1e",
+            measurementId: "G-E7N3JRL0GC"
+          };
+          // Initialize Firebase
+          var inicial = firebase.initializeApp(firebaseConfig);
+          var database =  inicial.database();
+          var storage = inicial.storage();
+          var auth = inicial.auth();
+          var btnHabilitar = document.getElementById("btnHabilitar");
+          var btnActualizar = document.getElementById("cardSubmit");
+          var btnCancelar = document.getElementById("btnCancelar");
+          var btnSubirFoto = document.getElementById("btnFoto");          
+          var progresoFoto = document.getElementById("progreso");
+          var txtNombre = document.getElementById("nombreEdit");
+          var txtApellido = document.getElementById("apellidoEdit");
+          var txtCorreo = document.getElementById("correoEdit");
+          var txtPass = document.getElementById("passEdit");
+          var usuarioUpdt;
+          var usuarioLogin;
+          var userAuth; 
+        
+        auth.onAuthStateChanged(async function(user){
+        if (user){
+              userAuth = auth.currentUser;
+
+          if(userAuth!=null){
+            await database.ref(`user/${user.uid}`).once("value").then(function (snapshot){
+                 usuarioLogin = snapshot.val();
+            });
+            document.getElementById("tabNombre").innerHTML=usuarioLogin.nombre;
+            txtNombre.value=usuarioLogin.nombre;
+            txtApellido.value=usuarioLogin.apellido;
+            txtCorreo.value=usuarioLogin.correo;
+            txtPass.value=usuarioLogin.pass;
+              $('#foto').attr('src', usuarioLogin.foto);
+          }
+        }
+      })
+    
+        //habilita campos para editar
+          $("#btnHabilitar").click(function(){  
+            habilitaCampos();
+          });
+
+          $("#btnActualizar").click(function(){ 
+            if($("#btnFoto").val() ==""){ 
+                  //actualizarRegistroSinImagen(); 
+                }
+          });
+
+          //deshabilita campos para editar;
+          $("#btnCancelar").click(function(){
+              deshabilitaCampos();
+          });
+
+          //cerrar sesión
+          $("#btnSalir").click(function(){
+            auth.signOut().then(function(){
+              window.location.replace("index.html");
+            }).catch(function(){
+                var error = error.message;
+                window.alert("error: "+error);
+              });
+          });
+
+          function deshabilitaCampos(){
+              btnHabilitar.style.display="block";
+              btnActualizar.style.display="none";
+              btnCancelar.style.display="none";
+              btnSubirFoto.style.display="none";
+              progresoFoto.style.display="none";
+              $("input").prop("disabled",true);
+          }
+
+          function habilitaCampos(){
+              btnHabilitar.style.display="none";
+              btnActualizar.style.display="block";
+              btnCancelar.style.display="block";
+              btnSubirFoto.style.display="block";
+              progresoFoto.style.display="block";
+              $("input").prop("disabled",false);
+          }
+
+       /*   //actualizar registro de usuario
+          $("btnActualizar").click(function(){
+            if(txtNombre.value!=""||txtApellido.value!=""||txtCorreo.value!=""||txtPass.value!=""){
+              usuarioUpdt = {
+                      nombre: txtNombre.value,
+                      apellido : txtApellido.value,
+                      correo : txtCorreo.value,
+                      pass : txtPass.value,
+                      };
+                        //verificamos que haya fotos cargadas
+                        if($("#btnFoto").val() == ""){ 
+                         actualizarRegistroSinImagen(usuarioUpdt); 
+                        }
+              }else{
+                alert("campos vacíos");
+              }
+          });
+
+          //actualiza registro sin imagen
+       async function actualizarRegistroSinImagen(usuarioUpdt){
+           await userAuth.updateEmail(txtCorreo.value).then(function(){
+           database.ref(`user/${usuarioLogin.id}`).update(usuarioUpdt).then(success =>{     
+                                  alert("Usuario Registrado exitosamente");
+                              }).catch((error)=>{
+            console.log(error.message);
+            });
+             });
+             auth.signOut().then(function(){
+                            window.location.replace("index.html");
+                          }).catch(function(){
+                              var error = error.message;
+                              window.alert("error: "+error);
+                            }); 
+             
+          }*/
+        </script>  
+  </body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+      <style>
+          #foto{
+            height: 10em;
+            width: 10em;
+            background-color: #64a19d;;
+            margin-bottom: .5em;
+            padding-bottom: .5em;
+            align-self: center;
+        }
+        #formulario{
+            width: 28em;
+            margin-bottom: 3em;
+            margin-top: 3em;
+            background-color: white;
+            padding-top: .4em;
+            opacity: 1;
+        }
+      </style>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Equipo 2 - Turismo</title>
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
+    <script
+      src="https://use.fontawesome.com/releases/v5.15.1/js/all.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- Google fonts-->
+    <link
+      href="https://fonts.googleapis.com/css?family=Varela+Round"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+      rel="stylesheet"
+    />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/styles.css" rel="stylesheet" />
+  </head>
+
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-app.js"></script>
+
+
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/7.23.0/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.23.0/firebase-storage.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.23.0/firebase-auth.js"></script>
+
+
+<script>
+   
+  </script>
+
+  <body id="page-top">
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="index.html"
+          >Toluca diviértete</a
+        >
+        <button
+          class="navbar-toggler navbar-toggler-right"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarResponsive"
+          aria-controls="navbarResponsive"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          Menu
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" data-toggle="collapse" data-target="#collapseLogin" href="#login">Iniciar Sesión</a>
+              <div class="collapse" id="collapseLogin">
+                <div class="card card-body">
+                  <p><i class="fa fa-sign-in"></i>Iniciar Sesión</p>
+                  <div class="formLogin">
+                    <div class="form-group" align="left">  
+                      <label><i class="fa fa-user"></i>Correo Electrónico</label>
+                      <input type="email" class="form-control" name="txtCorreoLog" placeholder="Correo" id="correoLogin" minlength="8"/>
+                  </div>
+                  <div class="form-group" align="left">
+                      <label><i class="fa fa-eye-slash"></i>Contraseña</label>
+                      <input type="password" class="form-control" name="txtPassLog" placeholder="Contraseña" id="passLogin" minlength="6"/>
+                  </div>
+                  <p>¿No te haz Registrado? <a href="registro.html">Registro</a></p>
+                  <button type="submit" class="btn btn-primary" align="center" id="btnIngresar">
+                      <i class="fa fa-sign-in"></i> Iniciar Sesión
+                  </button>
+                </div>  
+                </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+
+    <div class="principal" align="center">
+        <div class="formulario form"  id="formulario" enctype="multipart/form-data">
+            <div id="contenedor">
+            <h2><i class="fa fa-sign-in"></i>Registro</h2>
+            <div>
+              <img id="foto"/>
+              <input class="btn float-sm-center btn-primary" type="file" accept='image/x-png, image/jpeg, image/jpg'id="btnFoto"/>
+              <h6 id="progreso"></h6>
+              </div>
+            <div class="form-group" align="left">  
+                <label><i class="fa fa-user"></i>Nombre(s)</label>
+                <input type="text" class="form-control" name="txtNombre" placeholder="Nombre" id="nombreReg" minlength="3" required/>
+            </div>
+            <div class="form-group" align="left">  
+                <label><i class="fa fa-user"></i>Apellido(s)</label>
+                <input type="text" class="form-control" name="txtApellido" placeholder="Apellido(s)" id="apellidoReg" minlength="3" required/>
+            </div>        
+            <div class="form-group" align="left">  
+                <label><i class="fa fa-user"></i>Correo Electrónico</label>
+                <input type="email" class="form-control" name="txtCorreo" placeholder="Correo" id="correoReg" minlength="8" required/>
+            </div>
+            <div class="form-group" align="left">
+                <label><i class="fa fa-eye-slash"></i>Contraseña</label>
+                <input type="password" class="form-control" name="txtPass" placeholder="Contraseña" id="passReg" minlength="6" required/>
+            </div>
+            <span id='mensajeLengthPass2'></span>
+            <div class="form-group" align="left">
+                <label><i class="fa fa-eye-slash"></i>Confirmar Contraseña</label>
+                <input type="password" class="form-control" name="txtPass2" placeholder="Confirmar Contraseña" id="pass2Reg" minlength="6" required/>
+            </div>
+            <span id='mensajeLengthPass2'></span>
+            <span id='mensajeConfirmPass'></span>
+            <div class="form-group">    
+            <button class="btn btn-primary"  id="btnRegistro"style="width: 25em;">
+                <i class="fa fa-sign-up"></i> Registrarse
+            </button>
+          </div>
+        
+        </div>
+    </div>
+
+
+    <!-- Footer-->
+    <footer class="footer bg-black small text-center text-white-50">
+      <div class="container">Copyright © Your Website 2020</div>
+    </footer>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Third party plugin JS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+    
+    <!-- Core theme JS-->
+    <script src="js/scripts.js"></script>
+
+  <!----Validación de registro------>
+  <script>
+
+
+          // Your web app's Firebase configuration
+          // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+          var firebaseConfig = {
+            apiKey: "AIzaSyDc9LqktSq5joZke4iOH_XvqcKup_Je2aQ",
+            authDomain: "sitio-turistico-prog-web.firebaseapp.com",
+            projectId: "sitio-turistico-prog-web",
+            storageBucket: "sitio-turistico-prog-web.appspot.com",
+            messagingSenderId: "943450679611",
+            appId: "1:943450679611:web:4e11f096b4f336d6236f1e",
+            measurementId: "G-E7N3JRL0GC"
+          };
+          // Initialize Firebase
+          var inicial = firebase.initializeApp(firebaseConfig);
+          var database =  inicial.database();
+          var storage = inicial.storage();
+          var auth = inicial.auth();
+          var btnRegistro = document.getElementById("btnRegistro");
+          var txtNombreReg = document.getElementById("nombreReg");
+          var txtApellidoReg = document.getElementById("apellidoReg");
+          var txtCorreoReg = document.getElementById("correoReg");
+          var txtPassReg = document.getElementById("passReg");
+          var nombreFoto="";
+          var urlFoto ="";
+          var archivos = [];
+          var usuario;
+          //registro usuarios
+          $("#btnRegistro").click( function(){
+              if(txtNombreReg.value!=""||txtApellidoReg.value!=""||txtCorreoReg.value!=""||txtPassReg.value!=""){
+                    usuario ={
+                      nombre: txtNombreReg.value,
+                      apellido : txtApellidoReg.value,
+                      correo : txtCorreoReg.value,
+                      pass : txtPassReg.value,
+                        }
+                        //verificamos que haya fotos cargadas
+                        if($("#btnFoto").val() ==""){ 
+                          subirRegistroSinImagen(); 
+                        }else{
+                          subirRegistroConImagen(); 
+                        }
+              }else{
+                alert("campos vacíos");
+              }
+          });
+
+          /// subir imagen
+       function subirRegistroConImagen(){
+              // obtenemos nombre de foto
+              nombreFoto = archivos.name;
+              //subimos la foto a firebase
+              var subir = storage.ref(`imagenUsuario/${nombreFoto}`).put(archivos);
+              subir.on('state_changed',function(snapshot) {
+                //mostramos progreso de subida
+                var progreso = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                document.getElementById("progreso").innerHTML="Progreso de Subida"+ progreso +"%";
+              },
+              function (error){
+                  console.log(error);
+              },function(){
+                urlFoto=storage.ref(`imagenUsuario/${nombreFoto}`).getDownloadURL().then(function (url){
+                  //obtenemos url de foto
+                  urlFoto=url;
+                  //autenticamos usuario mediante email
+                  auth.createUserWithEmailAndPassword(txtCorreoReg.value, txtPassReg.value).then((user) => {
+                    usuario.id = user.user.uid;
+                    usuario.foto = urlFoto;
+                    //registramos usuario en database
+                     database.ref(`user/${user.user.uid}`).set(usuario).then(success =>{     
+                                  alert("Usuario Registrado exitosamente");
+                                  window.location.replace("index.html");
+                              }).catch((error)=>{
+                                console.log(error.message);
+                              });
+                     }).catch((error) => {
+                        var errorCode = error.code;
+                        var errorMessage = error.message;
+                        console.log(errorMessage);
+                      });      
+                  });
+              });
+          }
+
+         function subirRegistroSinImagen(){
+          auth.createUserWithEmailAndPassword(txtCorreoReg.value, txtPassReg.value).then((user) => {
+                    usuario.id = user.user.uid;
+                    usuario.foto = "";
+                    //registramos usuario en database
+                     database.ref(`user/${user.user.uid}`).set(usuario).then(success =>{     
+                                  alert("Usuario Registrado exitosamente");
+                                  window.location.replace("index.html");
+                              }).catch((error)=>{
+                                console.log(error.message);
+                              });
+                     }).catch((error) => {
+                        var errorCode = error.code;
+                        var errorMessage = error.message;
+                        console.log(errorMessage);
+            });
+          }
+
+          //validar contraseñas
+          $('#passReg, #pass2Reg').on('keyup', function () {
+          if($('#passReg').val() == $('#pass2Reg').val()) {
+            $('#mensajeConfirmPass').html('Las Contraseñas Coinciden').css('color', 'green');
+          } else 
+            $('#mensajeConfirmPass').html('Las contraseñas no Coinciden').css('color', 'red');
+          });
+          ///validar longitud contraseñas
+          $('#passReg').on('keypress', function () {
+          if($('#passReg').val().length < 6) {
+            $('#mensajeLengthPass').html('La contraseña debe de tener un mínimo de 6 caracteres').css('color', 'red');
+          }
+          });
+
+          $('#passReg2').on('keypress', function () {
+          if($('#passReg2').val().length < 6) {
+            $('#mensajeLengthPass2').html('La contraseña debe de tener un mínimo de 6 caracteres').css('color', 'red');
+          }
+          });
+
+          //preview foto
+
+          $("#btnFoto").change(function(){
+              mostrarFoto( this );
+          });
+
+          function mostrarFoto(subida) {   
+              if (subida.files && subida.files[0]) {
+                  var imagenFile = subida.files[0];
+                  archivos = imagenFile;
+ 
+                  var reader = new FileReader();    
+                  reader.onload = function (e) {
+                      $('#foto').attr('src', e.target.result);
+                  }    
+                  reader.readAsDataURL( imagenFile );
+              }
+          }
+          //autenticacion usuario
+          $("#btnIngresar").click(function(){
+            var correoLogin = document.getElementById("correoLogin").value;
+            var passLogin = document.getElementById("passLogin").value;
+            if(correoLogin!=""&&passLogin!=""){
+             auth.setPersistence(firebase.auth.Auth.Persistence.SESSION).then(function(){
+                auth.signInWithEmailAndPassword(correoLogin,passLogin).then(function (user){
+                window.location.replace("index.html");
+              }).catch(function(error){
+                var error = error.message;
+                setTimeout(window.alert("error login: "+error),4000);
+              });
+              }).catch(function(){
+                var error = error.message;
+                setTimeout(window.alert("error sesión: "+error),4000);
+              });
+            }
+          });
+        
+  </script>
+  </body>
+</html>
