@@ -76,7 +76,7 @@
     <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
       <div class="container">
-        <a class="navbar-brand js-scroll-trigger" href="index.html"
+        <a class="navbar-brand js-scroll-trigger" href="index.html" style="color: black"
           >Toluca Diviértete</a
         >
         <button
@@ -86,7 +86,7 @@
           data-target="#navbarResponsive"
           aria-controls="navbarResponsive"
           aria-expanded="false"
-          aria-label="Toggle navigation"
+          aria-label="Toggle navigation" 
         >
           Menu
           <i class="fas fa-bars"></i>
@@ -94,7 +94,7 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link" data-toggle="collapse" data-target="#collapseLogin" id="tabNombre"></a>
+              <a class="nav-link" data-toggle="collapse" data-target="#collapseLogin" style="color: black" id="tabNombre"></a>
               <div class="collapse" id="collapseLogin">
                 <div class="card card-body">
                   <div class="hover-overlay ripple shadow-1-strong rounded" align="center" style="margin-bottom: 1em;">
@@ -117,7 +117,6 @@
             <div id="contenedor card-body">
             <h2><i class="fa fa-sign-in"></i>Mi Perfil</h2>
             <div>
-              <div>
                 <img id="foto"/>
                 <input class="btn float-sm-center btn-primary" type="file" accept='image/x-png, image/jpeg, image/jpg'id="btnFoto"/>
                 <h6 id="progreso"></h6>
@@ -206,11 +205,13 @@
           var usuarioUpdt;
           var usuarioLogin;
           var userAuth; 
+          var urlFoto ="";
+          var archivos = [];
+          var nombreFoto="";
         
         auth.onAuthStateChanged(async function(user){
         if (user){
               userAuth = auth.currentUser;
-
           if(userAuth!=null){
             await database.ref(`user/${user.uid}`).once("value").then(function (snapshot){
                  usuarioLogin = snapshot.val();
@@ -230,11 +231,6 @@
             habilitaCampos();
           });
 
-          $("#btnActualizar").click(function(){ 
-            if($("#btnFoto").val() ==""){ 
-                  //actualizarRegistroSinImagen(); 
-                }
-          });
 
           //deshabilita campos para editar;
           $("#btnCancelar").click(function(){
@@ -269,8 +265,8 @@
               $("input").prop("disabled",false);
           }
 
-       /*   //actualizar registro de usuario
-          $("btnActualizar").click(function(){
+         //actualizar registro de usuario
+         $("#btnActualizar").click(function(){
             if(txtNombre.value!=""||txtApellido.value!=""||txtCorreo.value!=""||txtPass.value!=""){
               usuarioUpdt = {
                       nombre: txtNombre.value,
@@ -278,32 +274,101 @@
                       correo : txtCorreo.value,
                       pass : txtPass.value,
                       };
-                        //verificamos que haya fotos cargadas
-                        if($("#btnFoto").val() == ""){ 
-                         actualizarRegistroSinImagen(usuarioUpdt); 
-                        }
+                        //veraificamos que haya fotos cargadas
+                     if($("#btnFoto").val()==""){
+                            actualizarRegistroSinImagen(); 
+                     }else{
+                            actualizarRegistroConImagen();
+                     }
               }else{
                 alert("campos vacíos");
               }
           });
 
           //actualiza registro sin imagen
-       async function actualizarRegistroSinImagen(usuarioUpdt){
-           await userAuth.updateEmail(txtCorreo.value).then(function(){
-           database.ref(`user/${usuarioLogin.id}`).update(usuarioUpdt).then(success =>{     
-                                  alert("Usuario Registrado exitosamente");
-                              }).catch((error)=>{
-            console.log(error.message);
-            });
-             });
-             auth.signOut().then(function(){
+      function actualizarRegistroSinImagen(){
+        userAuth.updateEmail(txtCorreo.value).then(function(){
+                userAuth.updatePassword(txtPass.value).then(function(){
+                    var  credential = firebase.auth.EmailAuthProvider.credential(
+                        txtCorreo.value, 
+                        txtPass.value);
+                userAuth.reauthenticateWithCredential(credential);
+                 database.ref(`user/${usuarioLogin.id}`).update(usuarioUpdt).then(success =>{     
+                                  alert("Usuario Actualizado Exitosamente. Cerrando Sesión");
+                              auth.signOut().then(function(){
                             window.location.replace("index.html");
-                          }).catch(function(){
-                              var error = error.message;
-                              window.alert("error: "+error);
-                            }); 
-             
-          }*/
+                          }).catch(function(error){
+                            window.alert("Error con los Datos de Inicio de Sesión: "+error.message);}); 
+                  }).catch((error)=>{
+                      window.alert("Error al Actualizar Usuario en Base de Datos: "+error.message);});
+                }).catch((error)=>{
+                      window.alert("Error al Actualizar Contraseña"+error.message);});
+          }).catch((error)=>{
+              window.alert("Error al Actualizar Correo"+error.message);});
+        }
+
+          //actualiza registro con imagen nueva
+      function actualizarRegistroConImagen(){
+            // obtenemos nombre de foto
+         nombreFoto = archivos.name;
+              //subimos la foto a firebase
+         var subir = storage.ref(`imagenUsuario/${nombreFoto}`).put(archivos);
+         subir.on('state_changed',function(snapshot) {
+                  //mostramos progreso de subida
+                  var progreso = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                  document.getElementById("progreso").innerHTML="Progreso de Subida"+ progreso +"%";
+                   },
+                function (error){
+                    window.alert("error al subir foto: "+error.message);
+                },function(){
+                    urlFoto=storage.ref(`imagenUsuario/${nombreFoto}`).getDownloadURL().then(function (url){
+                      //obtenemos url de foto
+                      urlFoto=url;
+                      //actualizamos correo
+                      userAuth.updateEmail(txtCorreo.value).then(function(){
+                        //actualizamos contraseña
+                          userAuth.updatePassword(txtPass.value).then(function(){
+                            //autenticamos usuario con datos nuevos
+                                var  credential = firebase.auth.EmailAuthProvider.credential(
+                                     txtCorreo.value, 
+                                     txtPass.value);
+                                userAuth.reauthenticateWithCredential(credential);
+                                //actualizamos datos de usuario en bd
+                                usuarioUpdt.foto = urlFoto;
+                                  database.ref(`user/${usuarioLogin.id}`).update(usuarioUpdt).then(success =>{     
+                                      alert("Usuario Actualizado Exitosamente. Cerrando Sesión");
+                                        auth.signOut().then(function(){
+                                          window.location.replace("index.html");
+                                        }).catch(function(error){
+                                            window.alert("Error con los Datos de Inicio de Sesión: "+error.message);}); 
+                                  }).catch((error)=>{
+                                      window.alert("Error al Actualizar Usuario en Base de Datos"+error.message);});
+                           }).catch((error)=>{
+                              window.alert("Error al Actualizar Contraseña"+error.message);});
+                      }).catch((error)=>{
+                           window.alert("Error al Actualizar Correo"+error.message);});
+                    }).catch((error)=>{
+                        window.alert("Error al obtener URL de foto: "+error.message);});
+                  });
+          }
+        
+          //cargar foto
+          $("#btnFoto").change(function(){
+              mostrarFoto( this );
+          });
+
+          function mostrarFoto(subida) {   
+              if (subida.files && subida.files[0]) {
+                  var imagenFile = subida.files[0];
+                  archivos = imagenFile;
+                  var reader = new FileReader();    
+                  reader.onload = function (e) {
+                      $('#foto').attr('src', e.target.result);
+                  }    
+                  reader.readAsDataURL( imagenFile );
+              }
+          }
+          
         </script>  
   </body>
 </html>
