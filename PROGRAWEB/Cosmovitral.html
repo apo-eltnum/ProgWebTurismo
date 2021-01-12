@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>Nevado de Toluca</title>
+    <title>El Cosmovitral</title>
     <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
     <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js" crossorigin="anonymous"></script>
     <!-- Google fonts-->
@@ -95,15 +95,16 @@
 
     <!--Header-->
         <header>
-            <img class="img-fluid" src="assets/img/mast-nevado.png" alt="" />
+            <img class="img-fluid" src="assets/img/mast-cosmo.png" alt="" />
         </header>
         <section class="about-section text-center" id="about" style="padding-top: 1rem;">
         <div class="container">
             <div class="row">
               <div class="col-lg-8 mx-auto">
-                <h2 class="text-white mb-4"><strong>Nevado de Toluca</strong></h2>
+                <h2 class="text-white mb-4"><strong>Cosmovitral</strong></h2>
                 <p class="text-white-50">
-                    Uno de los escenarios naturales más bellos de México. Cuyo mayor tesoro está al llegar al cráter de este extinto volcán, llamado también Xinantécatl, que alcanza una altura de 4,680 metros sobre el nivel del mar. 
+                    Atractivo cultural y natural mas importante de Toluca, por más de 30 años fue uno de los mercados de mayor reconocimiento en el país se transformó en el vitral más grande del mundo.
+                    Símbolo del Estado de México, hecho en vidrio, magnífica obra de arte compuesta de murales fruto de los sueños del artista mexiquense Leopoldo Flores.
                 </p>
               </div>
             </div>
@@ -283,7 +284,7 @@
               urlFoto=storage.ref(`imagenGaleria/${nombreFoto}`).getDownloadURL().then(function (url){
                 urlFoto=url;
                   usuario.foto = urlFoto;
-                   database.ref(`Nevado`).push(usuario).then(success =>{     
+                   database.ref(`Cosmo`).push(usuario).then(success =>{     
                                 alert("Imagen subida exitosamente");
                                 window.location.reload();
                             }).catch((error)=>{
@@ -316,10 +317,10 @@
         // Initialize and add the map
         function initMap() {
           // The location of Uluru
-          const ubi = { lat: 19.1786100, lng: -99.8211100 };
+          const ubi = { lat: 19.2935727, lng: -99.6537108 };
           // The map, centered at Uluru
           const map = new google.maps.Map(document.getElementById("map"), {
-            zoom: 14,
+            zoom: 15,
             center: ubi,
           });
           // The marker, positioned at Uluru
@@ -332,8 +333,8 @@
 
       </script>
 
-<script>
-  var rootref = database.ref().child("Nevado");
+      <script>
+          var rootref = database.ref().child("Cosmo");
 
 
 rootref.on("child_added", snap => {
@@ -342,7 +343,8 @@ var image = snap.child("foto").val();
 $("#gallery_div").append("<div class='col-md-4 col-xs-6 thumb'><a class='thumbnail' href= "+image+" ><img class='img-responsive' src= "+ image + " alt=''></a>");
 
 }); 
-</script>
+      </script>
+
 
 </body>
 
