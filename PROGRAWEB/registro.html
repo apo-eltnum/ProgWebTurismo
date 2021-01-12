@@ -60,9 +60,9 @@
 
   <body id="page-top">
     <!-- Navigation-->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav" >
       <div class="container">
-        <a class="navbar-brand js-scroll-trigger" href="index.html"
+        <a class="navbar-brand js-scroll-trigger" style="color: black" href="index.html"
           >Toluca diviértete</a
         >
         <button
@@ -77,10 +77,10 @@
           Menu
           <i class="fas fa-bars"></i>
         </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
+        <div class="collapse navbar-collapse" id="navbarResponsive" >
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link" data-toggle="collapse" data-target="#collapseLogin" href="#login">Iniciar Sesión</a>
+              <a class="nav-link" data-toggle="collapse" data-target="#collapseLogin"  style="color: black" href="#login">Iniciar Sesión</a>
               <div class="collapse" id="collapseLogin">
                 <div class="card card-body">
                   <p><i class="fa fa-sign-in"></i>Iniciar Sesión</p>
@@ -222,47 +222,40 @@
                 document.getElementById("progreso").innerHTML="Progreso de Subida"+ progreso +"%";
               },
               function (error){
-                  console.log(error);
+                  window.alert(error.message);
               },function(){
                 urlFoto=storage.ref(`imagenUsuario/${nombreFoto}`).getDownloadURL().then(function (url){
                   //obtenemos url de foto
                   urlFoto=url;
                   //autenticamos usuario mediante email
                   auth.createUserWithEmailAndPassword(txtCorreoReg.value, txtPassReg.value).then((user) => {
-                    usuario.id = user.user.uid;
-                    usuario.foto = urlFoto;
-                    //registramos usuario en database
-                     database.ref(`user/${user.user.uid}`).set(usuario).then(success =>{     
-                                  alert("Usuario Registrado exitosamente");
+                        usuario.id = user.user.uid;
+                        usuario.foto = urlFoto;
+                        //registramos usuario en database
+                        database.ref(`user/${user.user.uid}`).set(usuario).then(success =>{     
+                                      alert("Usuario Registrado exitosamente");
                                   window.location.replace("index.html");
-                              }).catch((error)=>{
-                                console.log(error.message);
-                              });
-                     }).catch((error) => {
-                        var errorCode = error.code;
-                        var errorMessage = error.message;
-                        console.log(errorMessage);
-                      });      
-                  });
-              });
+                        }).catch((error)=>{
+                                window.alert("Error al Añadir Usuario en Base de Datos: "+error.message);});
+                  }).catch((error) => {
+                      window.alert("Error al registrar usuario con correo"+error.message);});      
+                }).catch((error)=>{
+                    window.alert("Error al obtener URL de foto: "+error.message);});
+                });
           }
 
          function subirRegistroSinImagen(){
           auth.createUserWithEmailAndPassword(txtCorreoReg.value, txtPassReg.value).then((user) => {
-                    usuario.id = user.user.uid;
-                    usuario.foto = "";
-                    //registramos usuario en database
-                     database.ref(`user/${user.user.uid}`).set(usuario).then(success =>{     
-                                  alert("Usuario Registrado exitosamente");
-                                  window.location.replace("index.html");
-                              }).catch((error)=>{
-                                console.log(error.message);
-                              });
-                     }).catch((error) => {
-                        var errorCode = error.code;
-                        var errorMessage = error.message;
-                        console.log(errorMessage);
-            });
+                        usuario.id = user.user.uid;
+                        usuario.foto = "";
+                        //registramos usuario en database
+                        database.ref(`user/${user.user.uid}`).set(usuario).then(success =>{     
+                                      alert("Usuario Registrado exitosamente");
+                                      window.location.replace("index.html");
+                        }).catch((error)=>{
+                                window.alert("Error al Añadir Usuario en Base de Datos: "+error.message);});
+            }).catch((error) => {
+             window.alert("Error al registrar usuario con correo"+error.message);})
           }
 
           //validar contraseñas
@@ -295,7 +288,6 @@
               if (subida.files && subida.files[0]) {
                   var imagenFile = subida.files[0];
                   archivos = imagenFile;
- 
                   var reader = new FileReader();    
                   reader.onload = function (e) {
                       $('#foto').attr('src', e.target.result);
@@ -309,16 +301,12 @@
             var passLogin = document.getElementById("passLogin").value;
             if(correoLogin!=""&&passLogin!=""){
              auth.setPersistence(firebase.auth.Auth.Persistence.SESSION).then(function(){
-                auth.signInWithEmailAndPassword(correoLogin,passLogin).then(function (user){
-                window.location.replace("index.html");
-              }).catch(function(error){
-                var error = error.message;
-                setTimeout(window.alert("error login: "+error),4000);
-              });
+                  auth.signInWithEmailAndPassword(correoLogin,passLogin).then(function (user){
+                    window.location.replace("index.html");
+                  }).catch(function(error){
+                    window.alert("Error al Iniciar Sesión: "+error.message);});
               }).catch(function(){
-                var error = error.message;
-                setTimeout(window.alert("error sesión: "+error),4000);
-              });
+                window.alert("Error al Guardar Sesión"+error.message);});
             }
           });
         
