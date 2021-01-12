@@ -79,16 +79,17 @@
         <header>
             <img class="img-fluid" src="assets/img/mast-nevado.png" alt="" />
         </header>
-
-    <section class="about-destinos text-center">
-                <div class="text-white col-xs-12 mx-auto tm-about-text-wrap text-center">
-                    <h2 class="text-uppercase mb-4"><strong>Nevado de Toluca</strong></h2>
-                    <p class="pb-5 mb-4">Nullam auctor, sapien sit amet lacinia euismod, lorem magna lobortis massa, in
-                        tincidunt mi metus quis lectus. Duis nec lobortis velit. Vivamus id magna vulputate, tempor ante
-                        eget, tempus augue. Maecenas ultricies neque magna.
-                    </p>
-                </div>
-            
+        <section class="about-section text-center" id="about" style="padding-top: 1rem;">
+        <div class="container">
+            <div class="row">
+              <div class="col-lg-8 mx-auto">
+                <h2 class="text-white mb-4"><strong>Nevado de Toluca</strong></h2>
+                <p class="text-white-50">
+                    Uno de los escenarios naturales más bellos de México. Cuyo mayor tesoro está al llegar al cráter de este extinto volcán, llamado también Xinantécatl, que alcanza una altura de 4,680 metros sobre el nivel del mar. 
+                </p>
+              </div>
+            </div>
+          </div>
 
     </section>
 
@@ -105,7 +106,6 @@
                         <div class="row">
                             <!--First row containing the main Heading-->
                             <div class="col-lg-12">
-                                <h1 class="page-header">Galería</h1>
                             </div>
                             <!--Next row containing the respective images in 3x4 grids starts here -->
                             <div id="gallery_div"></div>
@@ -113,14 +113,17 @@
                         </div>
                     </div>
 
+                    <button class="btn btn-sm btn-outline-secondary" id = "btnSubir">
+                        Subir Imagen
+                      </button>
 
-                </section>
-                <input class="btn btn-sm btn-outline-secondary" type="file" accept='image/x-png, image/jpeg, image/jpg' id="btnFoto"/>
+                <input class="btn-outline-secondary" type="file" accept='image/x-png, image/jpeg, image/jpg' id="btnFoto"/>
                 <h6 id="progreso"></h6>
 
-                <button class="btn btn-sm btn-outline-secondary" id = "btnSubir">
-                            Subir Imagen
-                          </button>
+
+
+                </section>
+
 
             </div>
 
@@ -197,6 +200,7 @@
         var usuario;
         //registro usuarios
         $("#btnSubir").click( function(){
+            usuario ={}
                       subirImagen(); 
             
         });
@@ -214,19 +218,14 @@
             },function(){
               urlFoto=storage.ref(`imagenGaleria/${nombreFoto}`).getDownloadURL().then(function (url){
                 urlFoto=url;
-                auth.createUserWithEmailAndPassword(txtCorreoReg.value, txtPassReg.value).then((user) => {
-                  usuario.id = user.user.uid;
                   usuario.foto = urlFoto;
-                   database.ref(`Nevado/${user.user.uid}`).set(usuario).then(success =>{     
-                                alert("Usuario Registrado exitosamente");
+                   database.ref(`Nevado`).push(usuario).then(success =>{     
+                                alert("Imagensubida exitosamente");
+                                window.location.reload();
                             }).catch((error)=>{
                               console.log(error.message);
                             });
-                   }).catch((error) => {
-                      var errorCode = error.code;
-                      var errorMessage = error.message;
-                      console.log(errorMessage);
-                    });      
+                   
                         });
             });
         }

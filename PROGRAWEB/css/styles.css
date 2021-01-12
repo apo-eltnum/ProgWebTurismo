@@ -10349,3 +10349,78 @@ body {
 .footer {
   padding: 5rem 0;
 }
+
+img {
+vertical-align: middle;
+}
+.img-responsive,.thumbnail a > img {
+display: block;
+max-width: 100%;
+height: auto;
+}
+.container {
+padding-right: 15px;
+padding-left: 15px;
+margin-right: auto;
+margin-left: auto;
+}
+@media (min-width: 1200px) {
+.container {
+width: 1170px;
+}
+}
+.container-fluid {
+padding-right: 15px;
+padding-left: 15px;
+margin-right: auto;
+margin-left: auto;
+}
+.row {
+margin-right: -15px;
+margin-left: -15px;
+}
+.col-lg-3, .col-md-4, .col-xs-6, .col-lg-12 {
+position: relative;
+min-height: 1px;
+padding-right: 15px;
+padding-left: 15px;
+}
+.col-xs-6 {
+width: 50%;
+float:left;
+}
+@media (min-width: 1200px) {
+.col-lg-3, .col-lg-12 {
+float: left;
+}
+.col-lg-12 {
+width: 100%;
+}
+.col-lg-3 {
+width: 25%;
+}
+}
+.thumbnail {
+display: block;
+padding: 4px;
+margin-bottom: 20px;
+background-color: #fff;
+border-radius: 4px;
+-webkit-transition: border .2s ease-in-out;
+-o-transition: border .2s ease-in-out;
+transition: border .2s ease-in-out;
+}
+a.thumbnail:hover,
+a.thumbnail:focus,
+a.thumbnail.active {
+border-color: #337ab7;
+}
+
+/* Set the size of the div element that contains the map */
+#map {
+  height: 500px;
+  /* The height is 400 pixels */
+  width: 100%;
+  /* The width is the width of the web page */
+}
+
