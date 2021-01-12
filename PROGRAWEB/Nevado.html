@@ -21,6 +21,14 @@
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDc9LqktSq5joZke4iOH_XvqcKup_Je2aQ&callback=initMap">
 </script>
 
+
+
+<style>
+    #listAutenticado #subidaImagenDiv{
+      display: none;
+    }
+</style>
+
 </head>
 
 
@@ -46,30 +54,40 @@
                       <li class="nav-item">
                         <a class="nav-link js-scroll-trigger" href="#mapa">Ubicación</a>
                       </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="collapse" data-target="#collapseLogin" href="#login">Iniciar
-                            Sesión</a>
+                      <li class="nav-item" id="listRegistro">
+                        <a class="nav-link" data-toggle="collapse" data-target="#collapseLogin" href="#login">Iniciar Sesión</a>
                         <div class="collapse" id="collapseLogin">
-                            <div class="card card-body">
-                                <p><i class="fa fa-sign-in"></i>Iniciar Sesión</p>
-                                <form class="formLogin">
-                                    <div class="form-group" align="left">
-                                        <label><i class="fa fa-user"></i>Correo Electrónico</label>
-                                        <input type="email" class="form-control" name="txtUser" placeholder="Usuario"
-                                            id="username" minlength="12" />
-                                    </div>
-                                    <div class="form-group" align="left">
-                                        <label><i class="fa fa-eye-slash"></i>Contraseña</label>
-                                        <input type="password" class="form-control" name="txtPass" placeholder="Usuario"
-                                            id="pass" minlength="4" />
-                                    </div>
-                                    <p>¿No te has Registrado? <a href="registro.html">Registro</a></p>
-                                    <button type="submit" class="btn btn-primary" align="center" id="btnIngresar">
-                                        <i class="fa fa-sign-in"></i> Iniciar Sesión
-                                    </button>
-                                </form>
+                          <div class="card card-body">
+                            <p><i class="fa fa-sign-in"></i>Iniciar Sesión</p>
+                            <div class="formLogin">
+                              <div class="form-group" align="left">  
+                                <label><i class="fa fa-user"></i>Correo Electrónico</label>
+                                <input type="email" class="form-control" name="txtCorreoLog" placeholder="Correo" id="correoLogin" minlength="8" required/>
                             </div>
-                    </li>
+                            <div class="form-group" align="left">
+                                <label><i class="fa fa-eye-slash"></i>Contraseña</label>
+                                <input type="password" class="form-control" name="txPasstLog" placeholder="Contraseña" id="passLogin" minlength="6" required/>
+                            </div>
+                            <p>¿No te haz Registrado? <a href="registro.html">Registro</a></p>
+                            <button type="submit" class="btn btn-primary" align="center" id="btnIngresar">
+                                <i class="fa fa-sign-in"></i> Iniciar Sesión
+                            </button>
+                          </div>  
+                          </div>
+                      </li>
+                      <li class="nav-item" id="listAutenticado">
+                        <a class="nav-link" data-toggle="collapse" data-target="#collapseAutenticado" id="tabNombre"></a>
+                        <div class="collapse" id="collapseAutenticado">
+                          <div class="card card-body">
+                            <div class="hover-overlay ripple shadow-1-strong rounded" align="center" style="margin-bottom: 1em;">
+                              <a href="perfil.html"><i class="fa fa-user"></i>Mi Perfil</a>
+                            </div>
+                            <button class="btn btn-danger" align="center" id="btnSalir">
+                                <i class="fa fa-sign-out"></i> Cerrar Sesión
+                            </button>
+                          </div>  
+                          </div>
+                      </li>
                 </ul>
             </div>
         </div>
@@ -112,16 +130,14 @@
 
                         </div>
                     </div>
-
+                <div id="subidaImagenDiv">
                     <button class="btn btn-sm btn-outline-secondary" id = "btnSubir">
                         Subir Imagen
                       </button>
 
                 <input class="btn-outline-secondary" type="file" accept='image/x-png, image/jpeg, image/jpg' id="btnFoto"/>
                 <h6 id="progreso"></h6>
-
-
-
+                <div>
                 </section>
 
 
@@ -189,22 +205,70 @@
         var database =  inicial.database();
         var storage = inicial.storage();
         var auth = inicial.auth();
-        var btnSubir = document.getElementById("btnSubir");
-        var txtNombreReg = document.getElementById("nombreReg");
-        var txtApellidoReg = document.getElementById("apellidoReg");
-        var txtCorreoReg = document.getElementById("correoReg");
-        var txtPassReg = document.getElementById("passReg");
         var nombreFoto="";
         var urlFoto ="";
         var archivos = [];
         var usuario;
-        //registro usuarios
+        var usuarioLogin;
+        var usuarioid
+        
+
+        //checar autenticación de usuario
+
+        auth.onAuthStateChanged(async function(user){
+        if (user){
+          document.getElementById("listRegistro").style.display="none";
+          document.getElementById("listAutenticado").style.display="block";
+          document.getElementById("subidaImagenDiv").style.display="block";
+          var userAuth = auth.currentUser;
+          if(userAuth!=null){
+            await database.ref(`user/${user.uid}`).once("value").then(function (snapshot){
+                 usuarioLogin = snapshot.val();
+            });
+            document.getElementById("tabNombre").innerHTML=usuarioLogin.nombre;
+          }
+        }else{
+          document.getElementById("listRegistro").style.display="block";
+          document.getElementById("listAutenticado").style.display="none";
+          document.getElementById("subidaImagenDiv").style.display="none";
+        }
+      })
+
+        //ingresar sesión
+        $("#btnIngresar").click(function(){
+        var correoLogin = document.getElementById("correoLogin").value;
+        var passLogin = document.getElementById("passLogin").value;
+
+        if(correoLogin!==""&&passLogin!==""){
+          auth.setPersistence(firebase.auth.Auth.Persistence.SESSION).then(function(){
+            auth.signInWithEmailAndPassword(correoLogin,passLogin).then(function (user){
+          }).catch(function(error){
+            window.alert("Error al Iniciar Sesión: "+error.message);
+          });
+          }).catch(function(){
+            var error = error.message;
+            window.alert("Error al Mantener la Sesión: "+error.message);
+          });
+        }
+      });
+
+    /// cerrar sesión
+    $("#btnSalir").click(function(){
+        auth.signOut().then(function(){
+            location.reload();
+        }).catch(function(error){
+            window.alert("Error al Cerrar la Sesión: "+error.message);
+            
+          });
+      });
+        //subir foto
         $("#btnSubir").click( function(){
             usuario ={}
                       subirImagen(); 
             
         });
 
+        
         /// subir imagen
      function subirImagen(){
             nombreFoto = archivos.name;
@@ -239,6 +303,8 @@
                   archivos = subida.files[0];
               }
           }
+
+
 
 </script>
 
